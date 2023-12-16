@@ -1,0 +1,38 @@
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+name = "markdown-tikz"
+description = "Utilities to compile TikZ figure in Markdown files."
+authors = [{name = "Valentin Vasseur", email = "valentin.vasseur@gmail.com"}]
+license = {text = "ISC"}
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["tikz", "mkdocs"]
+dynamic = ["version"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Documentation",
+    "Topic :: Software Development",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dependencies = [
+    "pymdown-extensions>=9",
+]
+
+[tool.pdm]
+version = {source = "scm"}
+plugins = [
+    "pdm-multirun",
+]

@@ -80,6 +80,18 @@ You are now able to execute code blocks instead of displaying them:
 ```
 ````
 
+To include TikZ libraries or set options for the tikzpicture environment, specify them in the header:
+
+````md
+```tikz library='angles,quotes' option='scale=3'
+\coordinate (A) at (1,0);
+\coordinate (B) at (0,0);
+\coordinate (C) at (30:1cm);
+
+\draw (A) -- (B) -- (C) pic [draw=green!50!black, fill=green!20, angle radius=9mm, "$\alpha$"] {angle = A--B--C};
+```
+````
+
 ## Credits
 
 This project is a stripped-down, modified version of Timothée Mazzucotelli's [Markdown Exec](https://github.com/pawamoy/markdown-exec).

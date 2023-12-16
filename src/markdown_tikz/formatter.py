@@ -6,7 +6,7 @@ import subprocess
 import os
 import tempfile
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from markupsafe import Markup
@@ -20,6 +20,9 @@ default_tabs = ("Code", "Figure")
 
 def tikz_to_svg(
     code: str,
+    tikzlibrary: str,
+    tikzoption: str,
+    **options: Any,
 ) -> str:
     with tempfile.TemporaryDirectory() as temp_dir:
         latex_path = os.path.join(temp_dir, "tikz.tex")
@@ -28,8 +31,9 @@ def tikz_to_svg(
 
         latex_document = f"""
         \\documentclass[tikz, border=10pt]{{standalone}}
+        \\usetikzlibrary{{{tikzlibrary}}}
         \\begin{{document}}
-        \\begin{{tikzpicture}}
+        \\begin{{tikzpicture}}[{tikzoption}]
         {code}
         \\end{{tikzpicture}}
         \\end{{document}}
@@ -64,6 +68,9 @@ def tikz_to_svg(
 def format_tikz(
     code: str,
     md: Markdown,
+    tikzlibrary: str,
+    tikzoption: str,
+    **options: Any,
 ) -> Markup:
     """Execute code and return HTML.
 
@@ -76,12 +83,18 @@ def format_tikz(
     """
     markdown = MarkdownConverter(md)
 
-    output = tikz_to_svg(code)
+    output = tikz_to_svg(code, tikzlibrary, tikzoption, **options)
 
     placeholder = str(uuid4())
 
+    full_code = f"""\
+\\usetikzlibrary{{{tikzlibrary}}}
+\\begin{{tikzpicture}}[{tikzoption}]
+{code}
+\\end{{tikzpicture}}
+"""
     wrapped_output = add_source(
-        source=code,
+        source=full_code,
         output=placeholder,
         language="latex",
         tabs=default_tabs,

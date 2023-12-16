@@ -15,7 +15,31 @@ if TYPE_CHECKING:
 
 from markdown_tikz.formatter import format_tikz
 
-__all__: list[str] = ["formatter"]
+__all__: list[str] = ["formatter", "validator"]
+
+
+def validator(
+    language: str,
+    inputs: dict[str, str],
+    options: dict[str, Any],
+    attrs: dict[str, Any],  # noqa: ARG001
+    md: Markdown,  # noqa: ARG001
+) -> bool:
+    """Validate code blocks inputs.
+
+    Parameters:
+        language: The code language.
+        inputs: The code block inputs, to be sorted into options and attrs.
+        options: The container for options.
+        attrs: The container for attrs:
+        md: The Markdown instance.
+
+    Returns:
+        Success or not.
+    """
+    options["tikzlibrary"] = inputs.pop("library", "")
+    options["tikzoption"] = inputs.pop("option", "")
+    return True
 
 
 def formatter(
@@ -47,6 +71,6 @@ def formatter(
         HTML contents.
     """
     if language == "tikz":
-        return format_tikz(code=source, md=md)
+        return format_tikz(code=source, md=md, **options)
     else:
         return source
